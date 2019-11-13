@@ -51,27 +51,21 @@ bool checkRow(List<List<int>> board) {
 }
 
 bool checkCol(List<List<int>> board) {
-  List<List<int>> transposed = transposeMatrix(board);
-  return (transposed.every((List <int>list) =>
+  List<List> transposed = transposeMatrix(board);
+  return (transposed.every((List list) =>
   (list
       .toSet()
       .length == 9)));
 }
 
 bool checkBlock(List<List<int>> board, int row, int col) {
-// Set to store characters seen so far.
-  List<int> tempList = [];
-  for (int i = 0; i < 3; i = i + 3) {
-    for (int j = 0; j < 3; j = j + 3) {
-      int curr = board[i + row][j + col];
-      if (tempList.contains(curr)) {
-        return false;
-      } else {
-        tempList.add(curr);
-      }
-    }
+  List newList = [];
+  for (var y in board) {
+    newList = [newList, y].expand((x) => x).toList();
   }
-  return true;
+  return (newList
+      .toSet()
+      .length == 9);
 }
 
 bool sudokuValidator(List<List<int>> board) {

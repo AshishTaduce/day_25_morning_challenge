@@ -1,4 +1,5 @@
 import 'package:test/test.dart';
+
 import 'main.dart';
 
 void main() {
@@ -37,7 +38,7 @@ void main() {
     } on Exception catch (e) {
       print('$isArgumentError');
     }
-    (test("Check if sudoko can hadle notInBox constraint", () {
+    (test("Check if sudoko can handle notInBox constraint", () {
       expect(
           sudokuValidator([
             [1, 2, 3, 4, 5, 6, 7, 8, 9],
