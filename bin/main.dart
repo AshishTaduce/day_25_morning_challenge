@@ -38,42 +38,36 @@ checkList(List<List<int>> board, int i) {
 }
 
 bool validInputs(List<List<int>> board) {
-  for (var x in board) {
+  for (List <int> x in board) {
     x.every((number) => number > 0 && number < 10);
   }
 }
 
 bool checkRow(List<List<int>> board) {
-  int count = 0;
-  for (List row in board) {
-    if (row
-        .toSet()
-        .length == 9) count++;
-  }
-  return count == 9;
+  return (board.every((List <int>list) =>
+  (list
+      .toSet()
+      .length == 9)));
 }
 
 bool checkCol(List<List<int>> board) {
-  List transposed = transposeMatrix(board);
-  int count = 0;
-  for (List col in transposed) {
-    if (col
-        .toSet()
-        .length == 9) count++;
-  }
-  return count == 9;
+  List<List<int>> transposed = transposeMatrix(board);
+  return (transposed.every((List <int>list) =>
+  (list
+      .toSet()
+      .length == 9)));
 }
 
 bool checkBlock(List<List<int>> board, int row, int col) {
 // Set to store characters seen so far.
-  List<int> st = [];
+  List<int> tempList = [];
   for (int i = 0; i < 3; i = i + 3) {
     for (int j = 0; j < 3; j = j + 3) {
-      int curr = board[i + row ][j + col ];
-      if (st.contains(curr)) {
+      int curr = board[i + row][j + col];
+      if (tempList.contains(curr)) {
         return false;
       } else {
-        st.add(curr);
+        tempList.add(curr);
       }
     }
   }
@@ -81,16 +75,14 @@ bool checkBlock(List<List<int>> board, int row, int col) {
 }
 
 bool sudokuValidator(List<List<int>> board) {
-  return checkRow(board) && checkCol(board) && isValidator(board);
+  return checkRow(board) && checkCol(board) && validateBlock(board);
 }
 
-bool isValidator(List<List<int>> board) {
+bool validateBlock(List<List<int>> board) {
   int n = 9;
-  for (int row = 0; row < n; row++) {
-    for (int col = 0; col < n; col++) {
-      if (row % 3 == 0 && col % 3 == 0) {
-        return checkBlock(board, row, col);
-      }
+  for (int row = 0; row < n; row + 3) {
+    for (int col = 0; col < n; col + 3) {
+      return checkBlock(board, row, col);
     }
   }
 }
