@@ -21,18 +21,18 @@
 //  [ 8, 7, 3, 5, 1, 2, 9, 6, 4 ]
 
 //  ]) ➞ true
-transposeMatrix(List<List> matrix) {
-  List<List> transpose = List<List>();
+transposeMatrix(List<List<int>> matrix) {
+  List<List<int>> transpose = List<List<int>>();
   for (int i = 0; i < matrix[0].length; i++) {
-    List newList = List();
+    List<int> newList = List();
     matrix.forEach((list) => {newList.add(list[i])});
     transpose.add(newList);
   }
   return transpose;
 }
 
-checkList(List<List<int>> board, int i) {
-  return !(board[i]
+bool checkList(List<int> list) {
+  return !(list
       .toSet()
       .length != 9);
 }
@@ -44,39 +44,37 @@ bool validInputs(List<List<int>> board) {
 }
 
 bool checkRow(List<List<int>> board) {
-  return (board.every((List <int>list) =>
-  (list
-      .toSet()
-      .length == 9)));
+  return (board.every((List <int>list) => (checkList(list))));
 }
 
 bool checkCol(List<List<int>> board) {
-  List<List> transposed = transposeMatrix(board);
-  return (transposed.every((List list) =>
-  (list
-      .toSet()
-      .length == 9)));
+  List<List<int>> transposed = transposeMatrix(board);
+  return (transposed.every((List <int>list) => (checkList(list))));
 }
 
-bool checkBlock(List<List<int>> board, int row, int col) {
-  List newList = [];
-  for (var y in board) {
-    newList = [newList, y].expand((x) => x).toList();
+bool isBoardBoxValid(List<List<int>> board, int rowPos, int colPos) {
+  List elements = [];
+
+  for (int row = rowPos; row < rowPos + 3; row++) {
+    for (int col = colPos; col < colPos + 3; col++) {
+      elements.add(board[row][col]);
+    }
   }
-  return (newList
+  return (elements
       .toSet()
       .length == 9);
+
 }
 
 bool sudokuValidator(List<List<int>> board) {
-  return checkRow(board) && checkCol(board) && validateBlock(board);
+  return checkRow(board) && checkCol(board) && checkBlock(board);
 }
 
-bool validateBlock(List<List<int>> board) {
+bool checkBlock(List<List<int>> board) {
   int n = 9;
   for (int row = 0; row < n; row + 3) {
     for (int col = 0; col < n; col + 3) {
-      return checkBlock(board, row, col);
+      return isBoardBoxValid(board, row, col);
     }
   }
 }
